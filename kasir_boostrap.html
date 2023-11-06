@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aplikasi Kasir</title>
+    <!-- Tautan ke berkas CSS Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h2>Aplikasi Kasir</h2>
+      <div class="form-group">
+        <label for="barang">Barang</label>
+        <input type="text" class="form-control" id="barang" placeholder="nama barang">
+      </div>
+
+      <div class="form-group">
+        <label for="harga">Harga</label>
+        <input type="number" class="form-control" id="harga" placeholder="harga barang">
+      </div>
+
+      <div class="form-group">
+        <label for="jumlah">Jumlah</label>
+        <input type="number" class="form-control" id="jumlah" placeholder="jumlah">
+      </div>
+
+      <button class="btn btn-primary" onclick="addItem()">Tambah Barang</button>
+    </div>
+
+    <div class="container">
+      <h2>Daftar Belanja</h2>
+      <ul class="list-group" id="shopping-list"></ul>
+    </div>
+
+    <div class="container">
+      <h2>Total Belanja</h2>
+      <h3 id="total-shopping" class="text-danger">Rp. 0,00-</h3>
+
+      <div class="form-group">
+        <label for="uang">Uang Diterima</label>
+        <input type="number" class="form-control" id="uang" placeholder="Uang Diterima">
+      </div>
+
+      <button class="btn btn-success" onclick="checkout()">Check Out</button>
+    </div>
+
+    <script>
+      // ... (kode JavaScript Anda tetap sama)
+    </script>
+    <!-- Tautan ke berkas JavaScript Bootstrap -->
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+  
+    <script>
+      let shoppingList = [];
+      let total = 0;
+      let moneyBack = 0;
+      
+      function addItem(){
+        const item = document.getElementById('barang').value; //mengambil input barang
+        const price = parseFloat(document.getElementById('harga').value); //mengambil input harga 
+        const quantity = parseFloat(document.getElementById('jumlah').value); //mengambil input jumlah
+        
+        if(item && price){
+          shoppingList.push({item, price, quantity}); //menambahkan objek item dan price ke array shoppingList
+          updateShoppingList();
+          total += (price * quantity);
+          updateTotal();
+          document.getElementById('barang').value = ''; //mengosongkan input barang
+          document.getElementById('harga').value = '';  //mengosongkan input harga 
+          document.getElementById('jumlah').value = ''; //mengosongkan input jumlah 
+          document.getElementById('uang').value = '';   //mengosongkan input uang 
+        }
+      }
+      
+      function updateShoppingList(){
+        const shoppingListElement = document.getElementById('shopping-list');
+        shoppingListElement.innerHTML = '';
+      
+        // Membuat tabel
+        const table = document.createElement('table');
+        table.classList.add('table'); // Menambahkan kelas Bootstrap untuk membuat tabel terlihat lebih baik
+      
+        // Membuat header tabel
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = '<th>Nama Barang</th><th>Harga</th><th>Jumlah</th><th>Total</th>';
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+      
+        // Membuat body tabel
+        const tbody = document.createElement('tbody');
+      
+        shoppingList.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${item.item}</td><td>Rp ${item.price}</td><td>${item.quantity}</td><td>Rp ${item.price * item.quantity}</td>`;
+          tbody.appendChild(row);
+        });
+      
+        table.appendChild(tbody);
+      
+        // Menambahkan tabel ke dalam elemen shopping list
+        shoppingListElement.appendChild(table);
+      }
+
+      
+      function updateTotal(){
+        const totalElement = document.getElementById('total-shopping');
+        totalElement.textContent = `Total Belanja = Rp ${total}`;
+      }
+      
+      function checkout(){
+        const moneyIn = parseFloat(document.getElementById('uang').value); // mengambil input uang masuk
+        alert(`Total Belanja anda adalah Rp. ${total},- anda membayar sebesar Rp. ${moneyIn},- Kembaliannya Rp. ${moneyIn-total} Terimakasih!`);
+      }
+      
+    </script>
+  </body>
+</html>
